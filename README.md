@@ -12,16 +12,23 @@ A modern, responsive, and feature-rich dashboard application designed for profes
 
 ## 📸 Screenshots
 
-Here are some previews of the VinShik Dashboard:
+<p align="center">
+  <img src="./src/assets/Screenshot%202025-08-17%20141335.png" width="45%"/>
+  <img src="./src/assets/Screenshot%202025-08-17%20141354.png" width="45%"/>
+</p>
+<p align="center">
+  <img src="./src/assets/Screenshot%202025-08-17%20141420.png" width="45%"/>
+  <img src="./src/assets/Screenshot%202025-08-17%20141427.png" width="45%"/>
+</p>
+<p align="center">
+  <img src="./src/assets/Screenshot%202025-08-17%20141434.png" width="45%"/>
+  <img src="./src/assets/Screenshot%202025-08-17%20141442.png" width="45%"/>
+</p>
+<p align="center">
+  <img src="./src/assets/Screenshot%202025-08-17%20141449.png" width="45%"/>
+  <img src="./src/assets/Screenshot%202025-08-17%20141502.png" width="45%"/>
+</p>
 
-![Screenshot 1](./src/assets/Screenshot%202025-08-17%20141335.png)  
-![Screenshot 2](./src/assets/Screenshot%202025-08-17%20141354.png)  
-![Screenshot 3](./src/assets/Screenshot%202025-08-17%20141420.png)  
-![Screenshot 4](./src/assets/Screenshot%202025-08-17%20141427.png)  
-![Screenshot 5](./src/assets/Screenshot%202025-08-17%20141434.png)  
-![Screenshot 6](./src/assets/Screenshot%202025-08-17%20141442.png)  
-![Screenshot 7](./src/assets/Screenshot%202025-08-17%20141449.png)  
-![Screenshot 8](./src/assets/Screenshot%202025-08-17%20141502.png)  
 ---
 
 ## ✨ Key Features
