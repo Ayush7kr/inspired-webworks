@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Search, Plus, Phone, Mail, MapPin, Calendar, Filter, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 
 const clients = [
   {
@@ -19,7 +23,7 @@ const clients = [
   {
     id: 2,
     name: "Sarah Johnson",
-    email: "sarah.j@email.com", 
+    email: "sarah.j@email.com",
     phone: "(555) 234-5678",
     address: "456 Oak Ave, City, ST 12345",
     lastJob: "2024-01-10",
@@ -32,7 +36,7 @@ const clients = [
     id: 3,
     name: "Mike Davis",
     email: "mike.davis@email.com",
-    phone: "(555) 345-6789", 
+    phone: "(555) 345-6789",
     address: "789 Pine Rd, City, ST 12345",
     lastJob: "2024-01-08",
     totalJobs: 15,
@@ -45,7 +49,7 @@ const clients = [
     name: "Emily Brown",
     email: "emily.brown@email.com",
     phone: "(555) 456-7890",
-    address: "321 Elm St, City, ST 12345", 
+    address: "321 Elm St, City, ST 12345",
     lastJob: "2024-01-20",
     totalJobs: 5,
     totalSpent: "$945",
@@ -61,7 +65,7 @@ const clients = [
     lastJob: "2024-01-05",
     totalJobs: 20,
     totalSpent: "$4,280",
-    status: "active", 
+    status: "active",
     avatar: "RW"
   }
 ];
@@ -70,12 +74,20 @@ export default function Clients() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClient, setSelectedClient] = useState<typeof clients[0] | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
 
-  const filteredClients = clients.filter(client =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.phone.includes(searchTerm)
-  );
+  const filteredClients = clients.filter(client => {
+    // Status Filter
+    const statusMatch = filterStatus === 'all' || client.status === filterStatus;
+
+    // Search Term Filter
+    const searchMatch = searchTerm === "" ||
+      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.phone.includes(searchTerm);
+
+    return statusMatch && searchMatch;
+  });
 
   return (
     <div className="space-y-6">
@@ -103,18 +115,54 @@ export default function Clients() {
               className="pl-10 w-64"
             />
           </div>
-          <Button variant="outline" className="hover:scale-105 transition-transform">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="hover:scale-105 transition-transform">
+                <Filter className="w-4 h-4 mr-2" />
+                Filter
+                {filterStatus !== 'all' && (
+                  <span className="ml-2 rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                    {filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)}
+                  </span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-4">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">Filter by Status</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Select a status to filter clients.
+                  </p>
+                </div>
+                <RadioGroup
+                  value={filterStatus}
+                  onValueChange={(value: "all" | "active" | "inactive") => setFilterStatus(value)}
+                  className="space-y-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="all" id="status-all" />
+                    <Label htmlFor="status-all">All</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="active" id="status-active" />
+                    <Label htmlFor="status-active">Active</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="inactive" id="status-inactive" />
+                    <Label htmlFor="status-inactive">Inactive</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setViewMode("grid")}
-            className={`p-2 rounded-lg transition-colors ${
-              viewMode === "grid" ? "bg-primary text-white" : "hover:bg-muted"
-            }`}
+            className={`p-2 rounded-lg transition-colors ${viewMode === "grid" ? "bg-primary text-white" : "hover:bg-muted"
+              }`}
           >
             <div className="w-4 h-4 grid grid-cols-2 gap-0.5">
               <div className="bg-current rounded-sm" />
@@ -125,9 +173,8 @@ export default function Clients() {
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`p-2 rounded-lg transition-colors ${
-              viewMode === "list" ? "bg-primary text-white" : "hover:bg-muted"
-            }`}
+            className={`p-2 rounded-lg transition-colors ${viewMode === "list" ? "bg-primary text-white" : "hover:bg-muted"
+              }`}
           >
             <div className="w-4 h-4 space-y-1">
               <div className="h-0.5 bg-current rounded" />
@@ -148,12 +195,11 @@ export default function Clients() {
         ].map((stat, index) => (
           <div
             key={stat.label}
-            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
-              stat.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
-              stat.color === 'success' ? 'border-success/20 hover:border-success/40' :
-              stat.color === 'warning' ? 'border-warning/20 hover:border-warning/40' :
-              'border-secondary/20 hover:border-secondary/40'
-            }`}
+            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${stat.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
+                stat.color === 'success' ? 'border-success/20 hover:border-success/40' :
+                  stat.color === 'warning' ? 'border-warning/20 hover:border-warning/40' :
+                    'border-secondary/20 hover:border-secondary/40'
+              }`}
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <p className="text-2xl font-bold text-foreground mb-1">{stat.value}</p>
@@ -179,9 +225,8 @@ export default function Clients() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">{client.name}</h3>
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                      client.status === 'active' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'
-                    }`}>
+                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${client.status === 'active' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'
+                      }`}>
                       {client.status}
                     </span>
                   </div>
@@ -274,9 +319,8 @@ export default function Clients() {
                       <span className="font-medium text-foreground">{client.totalSpent}</span>
                     </td>
                     <td className="p-4">
-                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                        client.status === 'active' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'
-                      }`}>
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${client.status === 'active' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'
+                        }`}>
                         {client.status}
                       </span>
                     </td>

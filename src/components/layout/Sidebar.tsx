@@ -30,10 +30,14 @@ export default function Sidebar() {
   return (
     <div className={cn(
       "relative flex flex-col h-screen bg-white border-r border-border/50 transition-all duration-300 shadow-soft",
-      isCollapsed ? "w-16" : "w-64"
+      isCollapsed ? "w-20" : "w-64" // Slightly increased collapsed width for better spacing
     )}>
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-border/50">
+      <div className={cn(
+        "flex items-center p-6 border-b border-border/50",
+        // FIX 1: Center the button when collapsed
+        isCollapsed ? "justify-center" : "justify-between"
+      )}>
         {!isCollapsed && (
           <div className="flex items-center space-x-3 animate-fade-in">
             <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center shadow-soft">
@@ -66,14 +70,19 @@ export default function Sidebar() {
               key={item.name}
               to={item.href}
               className={cn(
-                "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden",
+                "flex items-center py-3 rounded-xl transition-all duration-200 group relative",
+                // FIX 2: Conditionally apply styles for collapsed/expanded state
+                isCollapsed
+                  ? "justify-center px-3"
+                  : "space-x-3 px-4",
                 isActive
                   ? "bg-gradient-primary text-white shadow-glow"
                   : "text-foreground hover:bg-muted/50 hover:shadow-soft hover:-translate-y-0.5"
               )}
             >
               <item.icon className={cn(
-                "w-5 h-5 transition-colors",
+                // FIX 3: Prevent icon from shrinking
+                "w-5 h-5 flex-shrink-0 transition-colors",
                 isActive ? "text-white" : "text-muted-foreground group-hover:text-foreground"
               )} />
               {!isCollapsed && (

@@ -2,6 +2,15 @@ import { useState } from "react";
 import { Search, Plus, Filter, Eye, Edit, Send, DollarSign, Calendar, User, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const quotes = [
   {
@@ -17,7 +26,7 @@ const quotes = [
   },
   {
     id: 2,
-    number: "Q-2024-002", 
+    number: "Q-2024-002",
     client: "Sarah Johnson",
     service: "Electrical Installation",
     amount: "$780.00",
@@ -30,7 +39,7 @@ const quotes = [
     id: 3,
     number: "Q-2024-003",
     client: "Mike Davis",
-    service: "HVAC Maintenance", 
+    service: "HVAC Maintenance",
     amount: "$320.00",
     date: "2024-01-13",
     validUntil: "2024-02-13",
@@ -42,7 +51,7 @@ const quotes = [
     number: "Q-2024-004",
     client: "Emily Brown",
     service: "General Repair",
-    amount: "$235.00", 
+    amount: "$235.00",
     date: "2024-01-12",
     validUntil: "2024-02-12",
     status: "sent",
@@ -55,7 +64,7 @@ const quotes = [
     service: "Electrical Repair",
     amount: "$890.00",
     date: "2024-01-11",
-    validUntil: "2024-02-11", 
+    validUntil: "2024-02-11",
     status: "draft",
     description: "Electrical panel upgrade"
   }
@@ -69,17 +78,34 @@ const statusColors = {
   "rejected": "bg-danger/10 text-danger"
 };
 
+type SortByType = 'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc';
+
 export default function Quotes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState<SortByType>('date-desc');
 
-  const filteredQuotes = quotes.filter(quote => {
-    const matchesSearch = quote.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         quote.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         quote.number.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || quote.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredQuotes = quotes
+    .filter(quote => {
+      const matchesSearch = quote.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        quote.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        quote.number.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === "all" || quote.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'date-asc':
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case 'amount-desc':
+          return parseFloat(b.amount.replace(/[\$,]/g, '')) - parseFloat(a.amount.replace(/[\$,]/g, ''));
+        case 'amount-asc':
+          return parseFloat(a.amount.replace(/[\$,]/g, '')) - parseFloat(b.amount.replace(/[\$,]/g, ''));
+        case 'date-desc':
+        default:
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+    });
 
   const statusCounts = {
     all: quotes.length,
@@ -118,12 +144,11 @@ export default function Quotes() {
         ].map((stat, index) => (
           <div
             key={stat.label}
-            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
-              stat.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
-              stat.color === 'warning' ? 'border-warning/20 hover:border-warning/40' :
-              stat.color === 'success' ? 'border-success/20 hover:border-success/40' :
-              'border-secondary/20 hover:border-secondary/40'
-            }`}
+            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${stat.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
+                stat.color === 'warning' ? 'border-warning/20 hover:border-warning/40' :
+                  stat.color === 'success' ? 'border-success/20 hover:border-success/40' :
+                    'border-secondary/20 hover:border-secondary/40'
+              }`}
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <p className="text-2xl font-bold text-foreground mb-1">{stat.value}</p>
@@ -144,7 +169,7 @@ export default function Quotes() {
               className="pl-10 w-64"
             />
           </div>
-          
+
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -157,11 +182,43 @@ export default function Quotes() {
             <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>
           </select>
-          
-          <Button variant="outline" className="hover:scale-105 transition-transform">
-            <Filter className="w-4 h-4 mr-2" />
-            Advanced Filters
-          </Button>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="hover:scale-105 transition-transform">
+                <Filter className="w-4 h-4 mr-2" />
+                Advanced Filters
+                {sortBy !== 'date-desc' && (
+                  <span className="ml-2 h-2 w-2 rounded-full bg-primary" />
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-60">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">Sort Quotes</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Change the order of the quotes list.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="sort-by">Sort by</Label>
+                  <Select value={sortBy} onValueChange={(value: SortByType) => setSortBy(value)}>
+                    <SelectTrigger id="sort-by" className="w-full">
+                      <SelectValue placeholder="Select sort order" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date-desc">Newest First</SelectItem>
+                      <SelectItem value="date-asc">Oldest First</SelectItem>
+                      <SelectItem value="amount-desc">Amount (High to Low)</SelectItem>
+                      <SelectItem value="amount-asc">Amount (Low to High)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+
         </div>
       </div>
 
@@ -275,24 +332,21 @@ export default function Quotes() {
         ].map((item, index) => (
           <div
             key={item.title}
-            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:shadow-medium ${
-              item.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
-              item.color === 'success' ? 'border-success/20 hover:border-success/40' :
-              'border-warning/20 hover:border-warning/40'
-            }`}
+            className={`p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:shadow-medium ${item.color === 'primary' ? 'border-primary/20 hover:border-primary/40' :
+                item.color === 'success' ? 'border-success/20 hover:border-success/40' :
+                  'border-warning/20 hover:border-warning/40'
+              }`}
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className={`p-3 rounded-lg ${
-                item.color === 'primary' ? 'bg-primary/10' :
-                item.color === 'success' ? 'bg-success/10' :
-                'bg-warning/10'
-              }`}>
-                <item.icon className={`w-6 h-6 ${
-                  item.color === 'primary' ? 'text-primary' :
-                  item.color === 'success' ? 'text-success' :
-                  'text-warning'
-                }`} />
+              <div className={`p-3 rounded-lg ${item.color === 'primary' ? 'bg-primary/10' :
+                  item.color === 'success' ? 'bg-success/10' :
+                    'bg-warning/10'
+                }`}>
+                <item.icon className={`w-6 h-6 ${item.color === 'primary' ? 'text-primary' :
+                    item.color === 'success' ? 'text-success' :
+                      'text-warning'
+                  }`} />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{item.title}</h3>
