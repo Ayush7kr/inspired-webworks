@@ -1,25 +1,28 @@
-# My React Project
-
-## 🚀 Project Info
-This is a web application built using **Vite, React, TypeScript, Tailwind CSS, and shadcn-ui**.  
-It provides a modern frontend setup with fast development and clean UI components.
 
 ---
 
-## 📂 Tech Stack
-- **Vite** – fast build tool  
-- **React** – UI framework  
-- **TypeScript** – type safety  
-- **Tailwind CSS** – styling  
-- **shadcn-ui** – ready-to-use UI components  
+## 🤝 Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+Please ensure your code adheres to the project's coding standards and includes tests where applicable.
 
 ---
 
-## ⚙️ Setup Instructions
+## 📄 License
 
-### 1. Clone the repository
-```sh
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
-npm install
-npm run dev
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 📧 Contact
+
+Your Name - [@your_twitter_handle](https://twitter.com/your_twitter_handle) - your.email@example.com
+
+Project Link: [https://github.com/your-username/your-repo-name](https://github.com/your-username/your-repo-name)
