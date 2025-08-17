@@ -44,7 +44,7 @@ export default function Sidebar() {
               <span className="text-white font-bold text-lg font-display">V</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gradient-primary font-display">VirShik</h1>
+              <h1 className="text-xl font-bold text-gradient-primary font-display">VinShik</h1>
               <p className="text-xs text-muted-foreground font-medium">Professional Services</p>
             </div>
           </div>
