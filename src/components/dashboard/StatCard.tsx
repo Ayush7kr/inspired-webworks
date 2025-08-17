@@ -37,7 +37,7 @@ export default function StatCard({
 }: StatCardProps) {
   return (
     <div className={cn(
-      "relative p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:shadow-medium group animate-fade-in",
+      "relative p-6 bg-white rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-large group animate-fade-in shadow-soft",
       colorClasses[color],
       className
     )}>
