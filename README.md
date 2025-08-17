@@ -8,9 +8,20 @@
 
 A modern, responsive, and feature-rich dashboard application designed for professional service businesses. Built with a powerful frontend stack including Vite, React, TypeScript, and shadcn-ui.
 
-![VinShik Dashboard Screenshot](./screenshot.png)
-*(Recommendation: Add a screenshot of your application here and name it `screenshot.png`)*
+---
 
+## 📸 Screenshots
+
+Here are some previews of the VinShik Dashboard:
+
+![Screenshot 1](./src/assets/Screenshot%202025-08-17%20141335.png)  
+![Screenshot 2](./src/assets/Screenshot%202025-08-17%20141354.png)  
+![Screenshot 3](./src/assets/Screenshot%202025-08-17%20141420.png)  
+![Screenshot 4](./src/assets/Screenshot%202025-08-17%20141427.png)  
+![Screenshot 5](./src/assets/Screenshot%202025-08-17%20141434.png)  
+![Screenshot 6](./src/assets/Screenshot%202025-08-17%20141442.png)  
+![Screenshot 7](./src/assets/Screenshot%202025-08-17%20141449.png)  
+![Screenshot 8](./src/assets/Screenshot%202025-08-17%20141502.png)  
 ---
 
 ## ✨ Key Features
